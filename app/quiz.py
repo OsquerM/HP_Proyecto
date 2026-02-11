@@ -1,9 +1,15 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 from . import models
 from .database import get_db
 
 quiz_router = APIRouter()
+
+# 🔹 Modelo Pydantic para recibir JSON del quiz
+class RespuestaUsuario(BaseModel):
+    usuario_nombre: str
+    respuestas_usuario: dict  # {pregunta_id: respuesta_id}
 
 # ============================
 # Endpoint para obtener preguntas
@@ -13,11 +19,17 @@ def obtener_preguntas(db: Session = Depends(get_db)):
     preguntas = db.query(models.Pregunta).all()
     resultado = []
     for pregunta in preguntas:
-        respuestas = [{"id": r.id, "texto": r.texto_respuesta} for r in pregunta.respuestas]
+        respuestas = [
+            {
+                "id": r.id,
+                "texto": r.texto_respuesta,
+                "imagen": r.imagen  # ← agregar la imagen de cada respuesta
+            }
+            for r in pregunta.respuestas
+        ]
         resultado.append({
             "id": pregunta.id,
             "texto_pregunta": pregunta.texto_pregunta,
-            "imagen": pregunta.imagen,
             "respuestas": respuestas
         })
     return {"preguntas": resultado}
@@ -27,10 +39,12 @@ def obtener_preguntas(db: Session = Depends(get_db)):
 # ============================
 @quiz_router.post("/enviar_respuestas")
 def enviar_respuestas(
-    usuario_nombre: str,
-    respuestas_usuario: dict,  # formato: {pregunta_id: respuesta_id}
+    datos: RespuestaUsuario,
     db: Session = Depends(get_db)
 ):
+    usuario_nombre = datos.usuario_nombre
+    respuestas_usuario = datos.respuestas_usuario
+
     # Contador de casas
     contador_casas = {
         "Gryffindor": 0,
@@ -48,7 +62,7 @@ def enviar_respuestas(
     # Elegir casa con más puntos
     casa_resultado = max(contador_casas, key=contador_casas.get)
 
-    # Guardar usuario y resultado en la base de datos
+    # Guardar usuario y resultado en DB
     nuevo_usuario = models.Usuario(
         nombre=usuario_nombre,
         casa=casa_resultado
