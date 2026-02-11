@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Pregunta - Admin</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <h1>Editar Pregunta</h1>
+
+    <form action="/admin/actualizar_pregunta" method="post">
+        <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+        <label>Texto de la pregunta:</label>
+        <input type="text" name="texto_pregunta" value="{{ pregunta.texto_pregunta }}" required>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <h2>Respuestas</h2>
+    {% for r in pregunta.respuestas %}
+        <form action="/admin/actualizar_respuesta" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="respuesta_id" value="{{ r.id }}">
+            <label>Texto:</label>
+            <input type="text" name="texto_respuesta" value="{{ r.texto_respuesta }}" required>
+
+            <label>Casa:</label>
+            <select name="casa">
+                <option value="Gryffindor" {% if r.casa=='Gryffindor' %}selected{% endif %}>Gryffindor</option>
+                <option value="Slytherin" {% if r.casa=='Slytherin' %}selected{% endif %}>Slytherin</option>
+                <option value="Ravenclaw" {% if r.casa=='Ravenclaw' %}selected{% endif %}>Ravenclaw</option>
+                <option value="Hufflepuff" {% if r.casa=='Hufflepuff' %}selected{% endif %}>Hufflepuff</option>
+            </select>
+
+            <label>Imagen:</label>
+            <input type="file" name="imagen">
+
+            {% if r.imagen %}
+                <img src="/static/{{ r.imagen }}" alt="{{ r.texto_respuesta }}" width="100">
+            {% endif %}
+
+            <button type="submit">Actualizar Respuesta</button>
+        </form>
+        <hr>
+    {% endfor %}
+
+    <a href="/admin">Volver al panel</a>
+</body>
+</html>

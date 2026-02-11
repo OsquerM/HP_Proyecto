@@ -9,39 +9,52 @@
 <body>
     <h1>Panel Admin - Harry Potter Quiz</h1>
 
+    <!-- ================= AGREGAR NUEVA PREGUNTA ================= -->
     <h2>Agregar nueva pregunta</h2>
     <form action="/admin/agregar_pregunta" method="post" enctype="multipart/form-data">
         <label>Texto de la pregunta:</label>
         <input type="text" name="texto_pregunta" required><br><br>
 
         {% for i in range(1,5) %}
-            <label>Respuesta {{i}}:</label>
-            <input type="text" name="respuesta{{i}}" required>
-            <select name="casa{{i}}">
+            <label>Respuesta {{ i }}:</label>
+            <input type="text" name="respuesta{{ i }}" required>
+            <select name="casa{{ i }}">
                 <option value="Gryffindor">Gryffindor</option>
                 <option value="Slytherin">Slytherin</option>
                 <option value="Ravenclaw">Ravenclaw</option>
                 <option value="Hufflepuff">Hufflepuff</option>
             </select>
-            <input type="file" name="imagen{{i}}" required><br><br>
+            <input type="file" name="imagen{{ i }}" required><br><br>
         {% endfor %}
 
         <button type="submit">Agregar Pregunta</button>
     </form>
 
+    <!-- ================= PREGUNTAS EXISTENTES ================= -->
     <h2>Preguntas existentes</h2>
     {% for pregunta in preguntas %}
         <div class="pregunta-admin">
             <strong>{{ pregunta.texto_pregunta }}</strong>
+            
+            <!-- Botón Editar -->
+            <a href="/admin/editar_pregunta/{{ pregunta.id }}">Editar</a>
+
+            <!-- Botón Eliminar Pregunta -->
             <form action="/admin/eliminar_pregunta" method="post" style="display:inline;">
                 <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
                 <button type="submit">Eliminar Pregunta</button>
             </form>
+
+            <!-- Respuestas de la pregunta -->
             <div class="respuestas-admin">
                 {% for r in pregunta.respuestas %}
-                    <div>
-                        <img src="/static/{{ r.imagen }}" alt="{{ r.texto_respuesta }}">
+                    <div class="respuesta">
+                        {% if r.imagen %}
+                            <img src="/static/{{ r.imagen }}" alt="{{ r.texto_respuesta }}" width="100">
+                        {% endif %}
                         <p>{{ r.texto_respuesta }} ({{ r.casa }})</p>
+                        
+                        <!-- Botón Eliminar Respuesta -->
                         <form action="/admin/eliminar_respuesta" method="post">
                             <input type="hidden" name="respuesta_id" value="{{ r.id }}">
                             <button type="submit">Eliminar Respuesta</button>
@@ -50,6 +63,8 @@
                 {% endfor %}
             </div>
         </div>
+        <hr>
     {% endfor %}
+
 </body>
 </html>

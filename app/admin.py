@@ -6,6 +6,7 @@ from . import models
 from .database import get_db
 import shutil
 import os
+import uuid
 
 admin_router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -21,14 +22,12 @@ def mostrar_admin(request: Request, db: Session = Depends(get_db)):
     preguntas = db.query(models.Pregunta).all()
     return templates.TemplateResponse(
         "admin.html",
-        {
-            "request": request,
-            "preguntas": preguntas
-        }
+        {"request": request, "preguntas": preguntas}
     )
 
+
 # ==========================
-# Agregar nueva pregunta con 4 respuestas e imágenes
+# Agregar nueva pregunta
 # ==========================
 @admin_router.post("/admin/agregar_pregunta")
 def agregar_pregunta(
@@ -52,13 +51,12 @@ def agregar_pregunta(
 
     db: Session = Depends(get_db)
 ):
-    # 🔹 Crear la pregunta (SIN imagen)
+    # Crear pregunta
     pregunta = models.Pregunta(texto_pregunta=texto_pregunta)
     db.add(pregunta)
     db.commit()
     db.refresh(pregunta)
 
-    # 🔹 Lista de respuestas
     respuestas_info = [
         (respuesta1, casa1, imagen1),
         (respuesta2, casa2, imagen2),
@@ -68,14 +66,13 @@ def agregar_pregunta(
 
     for texto_respuesta, casa, archivo_imagen in respuestas_info:
 
-        # Guardar imagen en static/uploads
-        nombre_archivo = archivo_imagen.filename
+        # Nombre único para evitar sobreescritura
+        nombre_archivo = f"{uuid.uuid4()}_{archivo_imagen.filename}"
         ruta_guardado = os.path.join(UPLOAD_DIR, nombre_archivo)
 
         with open(ruta_guardado, "wb") as buffer:
             shutil.copyfileobj(archivo_imagen.file, buffer)
 
-        # Ruta que se guardará en la base de datos
         ruta_bd = f"uploads/{nombre_archivo}"
 
         respuesta = models.Respuesta(
@@ -89,7 +86,7 @@ def agregar_pregunta(
 
     db.commit()
 
-    return RedirectResponse(url="/admin", status_code=303)
+    return RedirectResponse("/admin", status_code=303)
 
 
 # ==========================
@@ -102,11 +99,13 @@ def eliminar_pregunta(
 ):
     pregunta = db.query(models.Pregunta).filter_by(id=pregunta_id).first()
 
-    if pregunta:
-        db.delete(pregunta)
-        db.commit()
+    if not pregunta:
+        return RedirectResponse("/admin", status_code=303)
 
-    return RedirectResponse(url="/admin", status_code=303)
+    db.delete(pregunta)
+    db.commit()
+
+    return RedirectResponse("/admin", status_code=303)
 
 
 # ==========================
@@ -119,8 +118,82 @@ def eliminar_respuesta(
 ):
     respuesta = db.query(models.Respuesta).filter_by(id=respuesta_id).first()
 
-    if respuesta:
-        db.delete(respuesta)
+    if not respuesta:
+        return RedirectResponse("/admin", status_code=303)
+
+    db.delete(respuesta)
+    db.commit()
+
+    return RedirectResponse("/admin", status_code=303)
+
+
+# ==========================
+# Mostrar formulario editar pregunta
+# ==========================
+@admin_router.get("/admin/editar_pregunta/{pregunta_id}")
+def editar_pregunta(
+    pregunta_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    pregunta = db.query(models.Pregunta).filter_by(id=pregunta_id).first()
+
+    if not pregunta:
+        return RedirectResponse("/admin", status_code=303)
+
+    return templates.TemplateResponse(
+        "editar_pregunta.html",
+        {"request": request, "pregunta": pregunta}
+    )
+
+
+# ==========================
+# Actualizar pregunta
+# ==========================
+@admin_router.post("/admin/actualizar_pregunta")
+def actualizar_pregunta(
+    pregunta_id: int = Form(...),
+    texto_pregunta: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    pregunta = db.query(models.Pregunta).filter_by(id=pregunta_id).first()
+
+    if pregunta:
+        pregunta.texto_pregunta = texto_pregunta
         db.commit()
 
-    return RedirectResponse(url="/admin", status_code=303)
+    return RedirectResponse("/admin", status_code=303)
+
+
+# ==========================
+# Actualizar respuesta
+# ==========================
+@admin_router.post("/admin/actualizar_respuesta")
+def actualizar_respuesta(
+    respuesta_id: int = Form(...),
+    texto_respuesta: str = Form(...),
+    casa: str = Form(...),
+    imagen: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    respuesta = db.query(models.Respuesta).filter_by(id=respuesta_id).first()
+
+    if not respuesta:
+        return RedirectResponse("/admin", status_code=303)
+
+    respuesta.texto_respuesta = texto_respuesta
+    respuesta.casa = casa
+
+    # Si suben nueva imagen
+    if imagen and imagen.filename:
+        nombre_archivo = f"{uuid.uuid4()}_{imagen.filename}"
+        ruta_guardado = os.path.join(UPLOAD_DIR, nombre_archivo)
+
+        with open(ruta_guardado, "wb") as buffer:
+            shutil.copyfileobj(imagen.file, buffer)
+
+        respuesta.imagen = f"uploads/{nombre_archivo}"
+
+    db.commit()
+
+    return RedirectResponse("/admin", status_code=303)
