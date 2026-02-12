@@ -20,3 +20,23 @@
 form { 
     margin-top: 10px; 
 }
+.admin-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    padding: 10px 20px;
+}
+
+.logout-button {
+    background-color: #c0392b;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.logout-button:hover {
+    background-color: #e74c3c;
+}

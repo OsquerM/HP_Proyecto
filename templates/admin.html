@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="/static/css/admin.css">
 </head>
 <body>
+    <!-- Navbar / header -->
+    <div class="admin-navbar">
+        <a href="/admin/logout" class="logout-button">Cerrar sesión</a>
+    </div>
+
     <h1>Panel Admin - Harry Potter Quiz</h1>
 
     <!-- ================= AGREGAR NUEVA PREGUNTA ================= -->
@@ -53,11 +58,11 @@
                             <img src="/static/{{ r.imagen }}" alt="{{ r.texto_respuesta }}" width="100">
                         {% endif %}
                         <p>{{ r.texto_respuesta }} ({{ r.casa }})</p>
-                        
+
                         <!-- Botón Eliminar Respuesta -->
-                        <form action="/admin/eliminar_respuesta" method="post">
+                        <form action="/admin/eliminar_respuesta" method="post" style="display:inline;">
                             <input type="hidden" name="respuesta_id" value="{{ r.id }}">
-                            <button type="submit">Eliminar Respuesta</button>
+                            <button type="submit">Eliminar</button>
                         </form>
                     </div>
                 {% endfor %}

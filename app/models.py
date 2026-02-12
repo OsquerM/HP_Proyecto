@@ -10,10 +10,9 @@ class Usuario(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(50), nullable=False)
-    password = Column(String(255), nullable=True)
-    rol = Column(String(20), default="usuario")
-    casa = Column(String(20), nullable=True)
-
+    password = Column(String(255), nullable=True)  # contraseña hasheada para admin
+    rol = Column(String(20), default="usuario")    # 'admin' o 'usuario'
+    casa = Column(String(20), nullable=True)       # casa asignada al jugador
 
 # ========================
 # Modelo Pregunta
@@ -31,7 +30,6 @@ class Pregunta(Base):
         cascade="all, delete-orphan"
     )
 
-
 # ========================
 # Modelo Respuesta
 # ========================
@@ -42,7 +40,7 @@ class Respuesta(Base):
     pregunta_id = Column(Integer, ForeignKey("preguntas.id", ondelete="CASCADE"), nullable=False)
     texto_respuesta = Column(String(255), nullable=False)
     casa = Column(String(20), nullable=False)  # Gryffindor, Slytherin, Ravenclaw, Hufflepuff
-    imagen = Column(String(255), nullable=True)  # Para la imagen de la opción
+    imagen = Column(String(255), nullable=True)  # ruta de la imagen de la respuesta
 
     # Relación inversa con pregunta
     pregunta = relationship("Pregunta", back_populates="respuestas")
