@@ -29,7 +29,7 @@
                 <option value="Ravenclaw">Ravenclaw</option>
                 <option value="Hufflepuff">Hufflepuff</option>
             </select>
-            <input type="file" name="imagen{{ i }}" required><br><br>
+            <input type="file" name="imagen{{ i }}"><br><br>
         {% endfor %}
 
         <button type="submit">Agregar Pregunta</button>
@@ -41,7 +41,7 @@
         <div class="pregunta-admin">
             <strong>{{ pregunta.texto_pregunta }}</strong>
             
-            <!-- Botón Editar -->
+            <!-- Botón Editar: apunta a la ruta individual -->
             <a href="/admin/editar_pregunta/{{ pregunta.id }}">Editar</a>
 
             <!-- Botón Eliminar Pregunta -->

@@ -9,31 +9,35 @@
     <h1>Editar Pregunta</h1>
 
     <form action="/admin/actualizar_pregunta" method="post" enctype="multipart/form-data">
+        <!-- ID de la pregunta -->
         <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
-        
+
+        <!-- Texto de la pregunta -->
         <label>Texto de la pregunta:</label>
         <input type="text" name="texto_pregunta" value="{{ pregunta.texto_pregunta }}" required><br><br>
 
-        {% for idx, r in enumerate(pregunta.respuestas) %}
-            <h3>Respuesta {{ idx+1 }}</h3>
-            <input type="hidden" name="respuesta_id{{ idx }}" value="{{ r.id }}">
+        <!-- Respuestas -->
+        {% for i in range(4) %}
+            {% set r = pregunta.respuestas[i] if i < pregunta.respuestas|length else None %}
+            <h3>Respuesta {{ i+1 }}</h3>
+
             <label>Texto:</label>
-            <input type="text" name="respuesta_texto{{ idx }}" value="{{ r.texto_respuesta }}" required>
-            
+            <input type="text" name="respuesta{{ i+1 }}" value="{{ r.texto_respuesta if r else '' }}" required>
+
             <label>Casa:</label>
-            <select name="respuesta_casa{{ idx }}">
-                <option value="Gryffindor" {% if r.casa=="Gryffindor" %}selected{% endif %}>Gryffindor</option>
-                <option value="Slytherin" {% if r.casa=="Slytherin" %}selected{% endif %}>Slytherin</option>
-                <option value="Ravenclaw" {% if r.casa=="Ravenclaw" %}selected{% endif %}>Ravenclaw</option>
-                <option value="Hufflepuff" {% if r.casa=="Hufflepuff" %}selected{% endif %}>Hufflepuff</option>
+            <select name="casa{{ i+1 }}">
+                <option value="Gryffindor" {% if r and r.casa=="Gryffindor" %}selected{% endif %}>Gryffindor</option>
+                <option value="Slytherin" {% if r and r.casa=="Slytherin" %}selected{% endif %}>Slytherin</option>
+                <option value="Ravenclaw" {% if r and r.casa=="Ravenclaw" %}selected{% endif %}>Ravenclaw</option>
+                <option value="Hufflepuff" {% if r and r.casa=="Hufflepuff" %}selected{% endif %}>Hufflepuff</option>
             </select>
-            
-            {% if r.imagen %}
+
+            {% if r and r.imagen %}
                 <p>Imagen actual:</p>
                 <img src="/static/{{ r.imagen }}" width="100">
             {% endif %}
             <label>Cambiar imagen:</label>
-            <input type="file" name="respuesta_imagen{{ idx }}"><br><br>
+            <input type="file" name="imagen{{ i+1 }}"><br><br>
         {% endfor %}
 
         <button type="submit">Actualizar Pregunta</button>
