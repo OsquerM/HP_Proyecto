@@ -95,8 +95,8 @@ def agregar_pregunta(
         if archivo and archivo.filename.strip():
             nombre_archivo = f"{uuid.uuid4().hex}_{archivo.filename}"
             ruta_guardado = os.path.join(UPLOAD_DIR, nombre_archivo)
-            with archivo.file as buffer, open(ruta_guardado, "wb") as f:
-                shutil.copyfileobj(buffer, f)
+            with open(ruta_guardado, "wb") as f:
+                shutil.copyfileobj(archivo.file, f)
             ruta_bd = f"uploads/{nombre_archivo}"
 
         respuesta = models.Respuesta(
@@ -142,7 +142,7 @@ def eliminar_respuesta(respuesta_id: int = Form(...), db: Session = Depends(get_
     return RedirectResponse("/admin", status_code=303)
 
 # ==========================
-# Mostrar formulario de editar pregunta
+# Editar y actualizar pregunta
 # ==========================
 @admin_router.get("/editar_pregunta/{pregunta_id}")
 def editar_pregunta(pregunta_id: int, request: Request, db: Session = Depends(get_db), _ = Depends(get_current_admin)):
@@ -151,12 +151,9 @@ def editar_pregunta(pregunta_id: int, request: Request, db: Session = Depends(ge
         raise HTTPException(status_code=404, detail="Pregunta no encontrada")
     return templates.TemplateResponse("editar_pregunta.html", {"request": request, "pregunta": pregunta})
 
-# ==========================
-# Actualizar pregunta
-# ==========================
-@admin_router.post("/actualizar_pregunta")
+@admin_router.post("/actualizar_pregunta/{pregunta_id}")
 def actualizar_pregunta(
-    pregunta_id: int = Form(...),
+    pregunta_id: int,
     texto_pregunta: str = Form(...),
     respuesta1: str = Form(...), casa1: str = Form(...), imagen1: UploadFile | None = File(None),
     respuesta2: str = Form(...), casa2: str = Form(...), imagen2: UploadFile | None = File(None),
@@ -184,14 +181,17 @@ def actualizar_pregunta(
             r.texto_respuesta = texto
             r.casa = casa
             if archivo and archivo.filename.strip():
+                # Borrar imagen antigua si existe
                 if r.imagen:
                     ruta_antigua = os.path.join("static", r.imagen)
                     if os.path.exists(ruta_antigua):
                         os.remove(ruta_antigua)
+
+                # Guardar nueva imagen
                 nombre_archivo = f"{uuid.uuid4().hex}_{archivo.filename}"
                 ruta_guardado = os.path.join(UPLOAD_DIR, nombre_archivo)
-                with archivo.file as buffer, open(ruta_guardado, "wb") as f:
-                    shutil.copyfileobj(buffer, f)
+                with open(ruta_guardado, "wb") as f:
+                    shutil.copyfileobj(archivo.file, f)
                 r.imagen = f"uploads/{nombre_archivo}"
 
     db.commit()
