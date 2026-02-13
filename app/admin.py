@@ -15,9 +15,9 @@ UPLOAD_DIR = "static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # ========================
-# Contexto de hashing de contraseñas
+# Contexto de hashing de contraseñas (SHA256)
 # ========================
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -66,10 +66,10 @@ def mostrar_admin(request: Request, db: Session = Depends(get_db), _ = Depends(g
 @admin_router.post("/admin/agregar_pregunta")
 def agregar_pregunta(
     texto_pregunta: str = Form(...),
-    respuesta1: str = Form(...), casa1: str = Form(...), imagen1: UploadFile = File(...),
-    respuesta2: str = Form(...), casa2: str = Form(...), imagen2: UploadFile = File(...),
-    respuesta3: str = Form(...), casa3: str = Form(...), imagen3: UploadFile = File(...),
-    respuesta4: str = Form(...), casa4: str = Form(...), imagen4: UploadFile = File(...),
+    respuesta1: str = Form(...), casa1: str = Form(...), imagen1: UploadFile | None = File(None),
+    respuesta2: str = Form(...), casa2: str = Form(...), imagen2: UploadFile | None = File(None),
+    respuesta3: str = Form(...), casa3: str = Form(...), imagen3: UploadFile | None = File(None),
+    respuesta4: str = Form(...), casa4: str = Form(...), imagen4: UploadFile | None = File(None),
     db: Session = Depends(get_db),
     _ = Depends(get_current_admin)
 ):
@@ -125,22 +125,7 @@ def eliminar_pregunta(pregunta_id: int = Form(...), db: Session = Depends(get_db
     return RedirectResponse("/admin", status_code=303)
 
 # ========================
-# Eliminar respuesta individual
-# ========================
-@admin_router.post("/admin/eliminar_respuesta")
-def eliminar_respuesta(respuesta_id: int = Form(...), db: Session = Depends(get_db), _ = Depends(get_current_admin)):
-    respuesta = db.query(models.Respuesta).filter_by(id=respuesta_id).first()
-    if respuesta:
-        if respuesta.imagen:
-            ruta_archivo = os.path.join("static", respuesta.imagen)
-            if os.path.exists(ruta_archivo):
-                os.remove(ruta_archivo)
-        db.delete(respuesta)
-        db.commit()
-    return RedirectResponse("/admin", status_code=303)
-
-# ========================
-# Editar pregunta
+# Editar y actualizar preguntas/respuestas (igual que tu código)
 # ========================
 @admin_router.get("/admin/editar_pregunta/{pregunta_id}")
 def editar_pregunta(pregunta_id: int, request: Request, db: Session = Depends(get_db), _ = Depends(get_current_admin)):
@@ -149,9 +134,6 @@ def editar_pregunta(pregunta_id: int, request: Request, db: Session = Depends(ge
         return RedirectResponse("/admin", status_code=303)
     return templates.TemplateResponse("editar_pregunta.html", {"request": request, "pregunta": pregunta})
 
-# ========================
-# Actualizar pregunta y sus respuestas
-# ========================
 @admin_router.post("/admin/actualizar_pregunta")
 def actualizar_pregunta(
     pregunta_id: int = Form(...),
@@ -167,7 +149,6 @@ def actualizar_pregunta(
     if not pregunta:
         raise HTTPException(status_code=404, detail="Pregunta no encontrada")
 
-    # Actualizar texto de la pregunta
     pregunta.texto_pregunta = texto_pregunta
 
     respuestas_info = [
@@ -184,13 +165,11 @@ def actualizar_pregunta(
             r.casa = casa
 
             if archivo_imagen and archivo_imagen.filename.strip():
-                # Borrar imagen antigua si existe
                 if r.imagen:
                     ruta_antigua = os.path.join("static", r.imagen)
                     if os.path.exists(ruta_antigua):
                         os.remove(ruta_antigua)
 
-                # Guardar nueva imagen
                 nombre_archivo = f"{uuid.uuid4().hex}_{archivo_imagen.filename}"
                 ruta_guardado = os.path.join(UPLOAD_DIR, nombre_archivo)
                 with archivo_imagen.file as buffer, open(ruta_guardado, "wb") as f:
@@ -201,7 +180,7 @@ def actualizar_pregunta(
     return RedirectResponse("/admin", status_code=303)
 
 # ========================
-# Logout del admin
+# Logout
 # ========================
 @admin_router.get("/admin/logout")
 def logout(_ = Depends(get_current_admin)):

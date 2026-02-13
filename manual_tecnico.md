@@ -1,6 +1,6 @@
 # Manual Técnico
 ## Proyecto: Sistema de Selección de Casas - Harry Potter
-Autor: [Tu Nombre]
+Autor: Óscar Manuel Benito Martín
 Tecnologías: FastAPI, Jinja2, SQLAlchemy, SQLite, HTML, CSS
 
 ---
