@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from fastapi.templating import Jinja2Templates
 from . import models
 from .database import get_db
 
 quiz_router = APIRouter()
+templates = Jinja2Templates(directory="templates")  # Para servir HTML
 
 # 🔹 Modelo Pydantic para recibir JSON del quiz
 class RespuestaUsuario(BaseModel):
@@ -72,3 +74,24 @@ def enviar_respuestas(
     db.refresh(nuevo_usuario)
 
     return {"usuario": usuario_nombre, "casa": casa_resultado}
+
+# ============================
+# Nuevo endpoint: mostrar resultado en HTML
+# ============================
+@quiz_router.get("/resultado")
+def mostrar_resultado(request: Request, nombre: str, casa: str):
+    """
+    Muestra el resultado del quiz con el nombre del usuario y la imagen de la casa
+    """
+    # Validar casa
+    casas_validas = ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"]
+    if casa not in casas_validas:
+        casa = "Gryffindor"
+    
+    # Nombre de la imagen según casa
+    imagen_casa = f"uploads/{casa.lower()}.jpg"
+    
+    return templates.TemplateResponse(
+        "resultado.html",
+        {"request": request, "nombre": nombre, "casa": casa, "imagen_casa": imagen_casa}
+    )

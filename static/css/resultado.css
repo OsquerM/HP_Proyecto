@@ -1,0 +1,89 @@
+/* ===================== General ===================== */
+body {
+    margin: 0;
+    font-family: 'Cinzel', serif;
+    background: black;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* ===================== Fondo / Efecto mágico ===================== */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url("/static/uploads/hogwarts.jpg") center/cover no-repeat;
+    filter: brightness(0.3);
+    z-index: -2;
+}
+
+/* Opcional: niebla */
+body::after {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 100%;
+    background: url("https://i.imgur.com/8IhQ5Qb.png");
+    opacity: 0.15;
+    animation: fogMove 90s linear infinite;
+    z-index: -1;
+}
+
+@keyframes fogMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* ===================== Contenedor ===================== */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 30px 50px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    box-shadow: 0 0 20px gold;
+}
+
+/* ===================== Títulos ===================== */
+h1 {
+    font-size: 48px;
+    color: gold;
+    text-shadow: 0 0 10px orange, 0 0 20px gold;
+}
+
+p {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+/* ===================== Imagen de la casa ===================== */
+.casa-img {
+    width: 300px;
+    max-width: 80%;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 20px gold;
+}
+
+/* ===================== Botón reinicio ===================== */
+.restart-button {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(45deg, #6b3bff, #ff3b8c);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.restart-button:hover {
+    transform: scale(1.1) rotate(-2deg);
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+}

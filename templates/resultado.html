@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¡Felicidades!</title>
+    <link rel="stylesheet" href="/static/css/resultado.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>¡Felicidades, {{ nombre }}!</h1>
+    <p>Has sido asignado a <strong>{{ casa }}</strong> 🏰</p>
+
+    <img src="/static/{{ imagen_casa }}" alt="{{ casa }}" class="casa-img">
+
+    <br><br>
+    <a href="/quiz" class="restart-button">Volver a hacer el quiz</a>
+</div>
+
+</body>
+</html>
