@@ -1,0 +1,4 @@
+Conexión a MariaDB
+mysql -u root -p
+
+

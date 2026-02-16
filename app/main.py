@@ -24,10 +24,24 @@ from .database import engine, Base
 from . import models
 Base.metadata.create_all(bind=engine)
 
-# 🔹 Ruta inicial de prueba
-@app.get("/")
-def leer_inicio():
-    return {"mensaje": "¡Hola! La base de datos y FastAPI están funcionando."}
+
+# 🔹 Ruta inicial → index.html
+@app.get("/", response_class=HTMLResponse)
+def leer_inicio(request: Request):
+    """
+    Sirve el archivo index.html que está en templates/
+    """
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+# 🔹 Ruta para mostrar index (opcional pero útil)
+@app.get("/index", response_class=HTMLResponse)
+def mostrar_index(request: Request):
+    """
+    Sirve el archivo index.html que está en templates/
+    """
+    return templates.TemplateResponse("index.html", {"request": request})
+
 
 # 🔹 Ruta para mostrar quiz
 @app.get("/quiz", response_class=HTMLResponse)

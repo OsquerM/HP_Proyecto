@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Georgia", serif;
+
+    background-image: url("/static/uploads/hogwarts.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    height: 100vh;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    color: white;
+}
+
+.titulo {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    font-size: 18px;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.jugar {
+    background-color: #740001;
+    color: white;
+}
+
+.jugar:hover {
+    background-color: #ae0001;
+    transform: scale(1.05);
+}
+
+.admin {
+    background-color: #222;
+    color: white;
+}
+
+.admin:hover {
+    background-color: #444;
+    transform: scale(1.05);
+}
