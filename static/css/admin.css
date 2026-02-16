@@ -1,42 +1,177 @@
-.pregunta-admin { 
-    border: 1px solid #ccc; 
-    padding: 10px; 
-    margin-bottom: 15px; 
-    border-radius: 6px; 
-    background: #fafafa; 
+/* ===== FONDO GENERAL ===== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #020617);
+    color: #f1f5f9;
+    margin: 0;
+    padding: 20px;
 }
-.respuestas-admin { 
-    display: flex; 
-    gap: 10px; 
-    margin-top: 5px; 
-}
-.respuestas-admin div { 
-    text-align: center; 
-}
-.respuestas-admin img { 
-    max-width: 100px; 
-    border-radius: 6px; 
-}
-form { 
-    margin-top: 10px; 
-}
+
+/* ===== NAVBAR ===== */
 .admin-navbar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #222;
-    color: white;
-    padding: 10px 20px;
+    justify-content: flex-end;
+    background: rgba(15, 23, 42, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 .logout-button {
-    background-color: #c0392b;
+    background: linear-gradient(45deg, #dc2626, #7f1d1d);
     color: white;
-    padding: 5px 10px;
+    padding: 10px 18px;
+    border-radius: 8px;
     text-decoration: none;
-    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 .logout-button:hover {
-    background-color: #e74c3c;
+    background: linear-gradient(45deg, #ef4444, #991b1b);
+    transform: scale(1.05);
+}
+
+/* ===== TITULOS ===== */
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #facc15;
+    text-shadow: 0 0 10px rgba(250,204,21,0.7);
+}
+
+h2 {
+    margin-top: 40px;
+    color: #38bdf8;
+}
+
+/* ===== FORMULARIO ===== */
+
+form {
+    background: rgba(15, 23, 42, 0.85);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+
+input[type="text"],
+select,
+input[type="file"] {
+
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 12px;
+
+    border-radius: 8px;
+    border: none;
+
+    background: #020617;
+    color: white;
+
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+}
+
+/* BOTONES */
+
+button {
+    background: linear-gradient(45deg, #2563eb, #1e40af);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+    transform: scale(1.05);
+}
+
+/* ===== PREGUNTAS ===== */
+
+.pregunta-admin {
+
+    background: rgba(15, 23, 42, 0.9);
+    padding: 15px;
+    border-radius: 12px;
+
+    margin-bottom: 15px;
+
+    box-shadow: 0 0 15px rgba(0,0,0,0.6);
+}
+
+/* BOTON EDITAR */
+
+.pregunta-admin a {
+
+    margin-left: 15px;
+    margin-right: 10px;
+
+    color: #facc15;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.pregunta-admin a:hover {
+
+    color: #fde047;
+}
+
+/* ===== RESPUESTAS ===== */
+
+.respuestas-admin {
+
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.respuesta {
+
+    background: rgba(2, 6, 23, 0.9);
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+
+    transition: 0.3s;
+}
+
+.respuesta:hover {
+
+    transform: scale(1.05);
+
+    box-shadow: 0 0 15px rgba(59,130,246,0.8);
+}
+
+.respuesta img {
+
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+/* ===== LINEA SEPARADORA ===== */
+
+hr {
+
+    border: none;
+    height: 1px;
+
+    background: linear-gradient(to right, transparent, #38bdf8, transparent);
+
+    margin: 30px 0;
 }
