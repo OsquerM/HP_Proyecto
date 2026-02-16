@@ -1,71 +1,120 @@
+/* ===================== General ===================== */
 body {
     margin: 0;
-    padding: 0;
-    font-family: "Georgia", serif;
-
-    background-image: url("/static/uploads/hogwarts.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    height: 100vh;
-}
-
-.overlay {
-    background-color: rgba(0, 0, 0, 0.6);
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container {
-    text-align: center;
+    overflow: hidden;
+    font-family: 'Cinzel', serif;
+    background: black;
     color: white;
+    cursor: url('/static/uploads/wand.png') 32 32, auto; /* Cursor de varita más grande, hotspot centrado */
 }
 
-.titulo {
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-.subtitulo {
-    font-size: 24px;
-    margin-bottom: 40px;
-}
-
-.botones {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.btn {
-    font-size: 18px;
-    padding: 15px 30px;
-    border: none;
-    cursor: pointer;
+/* ===================== Botón música ===================== */
+.music-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.6);
+    color: gold;
+    border: 1px solid gold;
+    padding: 10px 20px;
+    cursor: url('/static/uploads/wand.png') 32 32, auto; /* Cursor sobre botón */
     border-radius: 8px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
-.jugar {
-    background-color: #740001;
-    color: white;
+#musicButton:hover {
+    background: linear-gradient(45deg, #6b3bff, #ff3b8c);
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    transform: scale(1.1) rotate(-2deg);
 }
 
-.jugar:hover {
-    background-color: #ae0001;
-    transform: scale(1.05);
+/* ===================== Fondo Hogwarts ===================== */
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url("/static/uploads/hogwarts.jpg") center/cover no-repeat;
+    filter: brightness(0.4);
+    z-index: -3;
 }
 
-.admin {
-    background-color: #222;
-    color: white;
+/* ===================== Niebla ===================== */
+.fog {
+    position: fixed;
+    width: 200%;
+    height: 100%;
+    background: url("https://i.imgur.com/8IhQ5Qb.png");
+    opacity: 0.2;
+    animation: fogMove 60s linear infinite;
+    z-index: -2;
 }
 
-.admin:hover {
-    background-color: #444;
-    transform: scale(1.05);
+.fog1 { animation-duration: 60s; }
+.fog2 { animation-duration: 90s; opacity: 0.15; }
+
+@keyframes fogMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* ===================== Canvas partículas ===================== */
+#magicCanvas {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* ===================== Contenido ===================== */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* ===================== Título ===================== */
+.title {
+    font-size: 64px;
+    text-shadow:
+        0 0 10px gold,
+        0 0 20px gold,
+        0 0 40px orange;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px gold; }
+    to { text-shadow: 0 0 30px orange; }
+}
+
+.subtitle {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+/* ===================== Botones ===================== */
+a.start-button,
+a.admin-button,
+#musicButton {
+    background: #3b2e6c;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 5px;
+    cursor: url('/static/uploads/wand.png') 32 32, auto; /* Cursor de varita sobre botones */
+}
+
+/* Hover mágico */
+a.start-button:hover,
+a.admin-button:hover {
+    background: linear-gradient(45deg, #6b3bff, #ff3b8c);
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    transform: scale(1.1) rotate(-2deg);
+    cursor: url('/static/uploads/wand.png') 32 32, auto; /* Cursor de varita más grande */
 }

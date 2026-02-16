@@ -4,38 +4,64 @@
     <meta charset="UTF-8">
     <title>Harry Potter Quiz</title>
     <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/magic.js" defer></script>
+    <script src="/static/js/musica.js" defer></script>
 </head>
 <body>
 
-    <div class="overlay">
+<!-- Música -->
+<audio id="bgMusic" loop>
+    <source src="/static/audio/hogwarts.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+</audio>
 
-        <div class="container">
+<!-- Botón música -->
+<button id="musicButton" onclick="toggleMusic()" class="music-button">
+    🔊 Música ON
+</button>
 
-            <h1 class="titulo">Harry Potter Quiz</h1>
+<!-- Fondo -->
+<div class="background"></div>
 
-            <p class="subtitulo">
-                Descubre a qué casa de Hogwarts perteneces
-            </p>
+<!-- Niebla -->
+<div class="fog fog1"></div>
+<div class="fog fog2"></div>
 
-            <div class="botones">
+<!-- Partículas -->
+<canvas id="magicCanvas"></canvas>
 
-                <a href="/quiz">
-                    <button class="btn jugar">
-                        Jugar Quiz
-                    </button>
-                </a>
+<!-- Contenido -->
+<div class="container">
+    <h1 class="title">Harry Potter Quiz</h1>
+    <p class="subtitle">Descubre tu verdadera casa en Hogwarts</p>
+    <a href="/quiz" class="start-button">Comenzar Quiz</a>
+    <br><br>
+    <a href="/admin/login" class="admin-button">Admin</a>
+</div>
 
-                <a href="/admin/login">
-                    <button class="btn admin">
-                        Panel Administrador
-                    </button>
-                </a>
+<script>
+    // Música: reproducir al primer clic del usuario
+    const music = document.getElementById("bgMusic");
+    const button = document.getElementById("musicButton");
+    let playing = false;
 
-            </div>
+    document.body.addEventListener("click", () => {
+        if (!playing) {
+            music.play().catch(e => console.log("Autoplay bloqueado", e));
+            playing = true;
+        }
+    }, { once: true });
 
-        </div>
-
-    </div>
+    function toggleMusic() {
+        if (music.paused) {
+            music.play();
+            button.innerText = "🔊 Música ON";
+        } else {
+            music.pause();
+            button.innerText = "🔇 Música OFF";
+        }
+    }
+</script>
 
 </body>
 </html>
