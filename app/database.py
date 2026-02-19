@@ -10,10 +10,20 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@localhost:3306/harryquiz"
 
 # 🔹 Motor de conexión
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    echo=True,
+    pool_pre_ping=True,   # evita errores de conexión muerta
+    pool_recycle=3600,    # recicla conexiones cada 1 hora
+    future=True           # compatibilidad moderna SQLAlchemy
+)
 
 # 🔹 Sesión
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 # 🔹 Base para modelos
 Base = declarative_base()
