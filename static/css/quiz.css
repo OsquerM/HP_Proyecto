@@ -272,3 +272,54 @@ button:active {
         0 0 10px gold;
 
 }
+/* ===================== Navbar ===================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border-bottom: 2px solid gold;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* para que esté encima del fondo */
+}
+
+/* ===================== Botón Volver ===================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border-bottom: 2px solid gold;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* importante: encima del fondo */
+}
+
+.navbar .volver-button {
+    display: inline-block;          /* necesario para padding y border-radius */
+    position: relative;             /* importante para box-shadow */
+    z-index: 1001;                  /* asegurar que esté por encima del fondo */
+    background: linear-gradient(45deg, #6b3bff, #ff3b8c);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px gold;
+}
+
+/* Hover efecto mágico */
+.navbar .volver-button:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 0 15px gold, 0 0 25px orange, 0 0 35px purple;
+}
+
+/* Click presionado */
+.navbar .volver-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px gold;
+}

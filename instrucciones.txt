@@ -1,6 +1,27 @@
 Conexión a MariaDB
 mysql -u root -p
+Mostrar la base de datos
+SHOW DATABASES;
+
+USAR UNA BASE DE DATOS
+USE HARRYQUIZ;
+
+GIT BASH 
+1️⃣ Crear entorno virtual
+
+python -m venv venv
+
+2️⃣ Activarlo
+
+source venv/Scripts/activate
+
+3️⃣ Instalar dependencias
+
+pip install -r requirements.txt
+
 
 Activar el entorno virtual:
-source venv\Scripts\activate
+source venv/Scripts/activate
 
+## Ejecución del servidor 
+```uvicorn app.main:app --reload```

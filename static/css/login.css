@@ -36,3 +36,18 @@
         .login-box button:hover {
             background-color: #301060;
         }
+        .volver-button {
+            display: inline-block;
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #777;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .volver-button:hover {
+            background-color: #555;
+        }

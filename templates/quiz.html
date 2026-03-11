@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Harry Potter Quiz</title>
-
+    
     <link rel="stylesheet" href="{{ url_for('static', path='css/quiz.css') }}">
     <script src="{{ url_for('static', path='js/quiz.js') }}" defer></script>
 
 </head>
 <body>
 
-    <h1>Harry Potter Quiz</h1>
+    <!-- ===================== Navbar ===================== -->
+    <div class="navbar">
+        <a href="/" class="volver-button">← Volver</a>
+    </div>
 
+    <!-- ===================== Formulario ===================== -->
     <form id="quizForm">
 
         <label for="usuario">Nombre:</label>
